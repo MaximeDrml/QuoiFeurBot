@@ -9,6 +9,8 @@ cd ./QuoiFeurBot
 npm install
 ```
 
+Mettre le token de bot dans un fichier `.env` comme dans `.env.example`
+
 ## Lancer le bot
 ```
 npm start
