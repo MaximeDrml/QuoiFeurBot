@@ -1,4 +1,4 @@
-import { Client, Collection, GuildMember, Intents, MessageEmbed } from 'discord.js'
+import { Client, Collection, GuildEmoji, GuildMember, Intents, MessageEmbed } from 'discord.js'
 import 'dotenv/config'
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 
@@ -27,9 +27,15 @@ client.on('messageCreate', async message => {
 
     if (/(quoi|koi|quoa|koa|cauha|kwa|qwa|coi)\W*$/gmi.test(message.content)) {
         const emojisCollection = await message.guild.emojis.fetch()
-        const randomEmoji = emojisCollection.random()
+        let randomEmoji: GuildEmoji;
+        let c = 0;
+        do {
+            randomEmoji = emojisCollection.random()
+            c++
+        } while (randomEmoji.animated && c < 10);
         const emoji = randomEmoji ? ` <:${randomEmoji.name}:${randomEmoji.id}>` : ''
-        message.channel.send(`feur${emoji}`)
+        const response = Math.random() >= 0.2 ? 'feur' : 'quoicoubeh quoicoubeh quoicoubeh'
+        message.channel.send(`${response}${emoji}`)
         incrementScore(message.member)
     }
 })
@@ -48,4 +54,8 @@ function getGuildLeaderBoard(guildId: string) {
     else return guildLeaderboards.set(guildId, new Collection()).get(guildId)
 }
 
-client.login(process.env.BOT_TOKEN)
+try {
+    client.login(process.env.BOT_TOKEN)   
+} catch (error) {
+    console.error(error)
+}
